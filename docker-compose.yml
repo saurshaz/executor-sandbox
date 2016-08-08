@@ -1,0 +1,15 @@
+web:
+  build: ./web
+  ports:
+    - "3600:3600"
+  volumes:
+    - ./code/web:/srv/www/
+  command: bash -c "cd /srv/www && npm install && node /srv/www/server.js"
+  links:
+    - mongodb
+mongodb:
+  image: mongo
+  ports: 
+   - "27017:27017"
+  environment:
+    MONGODB_PASS: password
