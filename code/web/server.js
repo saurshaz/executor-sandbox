@@ -10,8 +10,8 @@ app.put("/run", function(request, response) {
 
     code(args, (e, r) => {
       if(!e){
+        // @todo :: remove this - shall be replaced with arequest id which is unique for this request mad
         r.abc='xyz'
-        console.log('until ... ',moment('1977-08-20 14:29:00 UTC').fromNow())
         response.json(r)
       }else{
         response.json({e:e,error:'error in executing code'})
@@ -21,6 +21,6 @@ app.put("/run", function(request, response) {
 
 
 app.listen(3600, () => {
-  console.log('until ... ',moment('1977-08-20 14:29:00 UTC').fromNow())
+  console.log('now ... ',moment().now())
   console.log('executor-service Server is running at -', 3600)
 })
