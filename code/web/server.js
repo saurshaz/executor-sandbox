@@ -1,7 +1,10 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var moment = require('moment');
-var app = express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const moment = require('moment');
+const app = express();
+const env = require('./lib/environment')
+const log = require('./lib/logger')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.put("/run", function(request, response) {
