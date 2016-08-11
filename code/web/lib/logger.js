@@ -46,7 +46,7 @@ function errorSerializer (error) {
 }
 
 module.exports = bunyan.createLogger({
-  name: 'executor-service',
+  name: 'executor-sandbox-service',
   level: process.env.LOG_LEVEL,
   serializers: {
     request: requestSerializer,
