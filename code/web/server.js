@@ -21,6 +21,6 @@ app.put("/run", function(request, response) {
 
 
 app.listen(3600, () => {
-  console.log('now ... ',moment().now())
+  console.log('now ... ',moment(new Date()).format('YYYY-MM-DD > HH:MM:SS'))
   console.log('executor-service Server is running at -', 3600)
 })
