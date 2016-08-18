@@ -16,20 +16,27 @@ app.put("/run", function(request, response) {
     // @todo :: uncomment commented code below. currently fails the tests
     // auth.checkAuth(ticker, (err, passed) => {
     //   if(!err && passed) {
-        log.info(` auth for ticker - ${ticker} passed`)
-        code(args, (e, r) => {
+        // log.info(` auth for ticker - ${ticker} passed`)
+        const vm = require('vm');
+        vm.runInNewContext(code(args, (e, r) => {
           if(!e){
             // @todo :: remove this - shall be replaced with arequest id which is unique for this request mad
             r.abc='xyz'
+            console.log(' console in callback ',r)
             response.json(r)
           }else{
             response.json({e:e,error:'error in executing code'})
           }
-        })
+        }),  {
+          require: require,
+          console: console
+        });
     //   } else {
     //     response.json({e:err,error:'error in authenticating request with ticker - '+ticker})
     //   } 
     // })
+
+
 });
 
 
