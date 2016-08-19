@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>XecutR</title>
+  </head>
+
+  <body>
+    <div id="message"></div>
+    <usermanagement auth_url="<%= AUTH_SERVER_URL %>" redirect_uri_path="<%= REDIRECT_URI_PATH %>"></usermanagement>
+    <coditor></coditor>
+    <label> function Name </label> <input type="text" id="fn_name">
+    <br/>
+    <label> users authorized </label> <input type="text" id="function_users">
+    <br/>
+    <label> groups authorized </label> <input type="text" id="function_groups">
+    <br/>
+    <button onclick="saveFunction()"> Save </button>
+    <br/>
+    <script src="/jquery-1.10.2-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/ace/1.2.3/noconflict/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.4.0/riot+compiler.min.js"></script>
+      <script>
+        var _editors = [];
+      </script>
+      <script src="/js.cookie.js"></script>  
+    <script src="./coditor.tag" type="riot/tag"></script>
+    <script src="./usermanagement.tag" type="riot/tag"></script>
+    <script>
+      const saveFunction = () => {
+          let valueMetadata = JSON.parse(_editors[1].env.editor.getValue())
+          let valueFunction = _editors[0].env.editor.getValue()
+          const fn_name = document.querySelector('#fn_name').value;
+          
+          if(!fn_name) {
+            alert(' No function name provided')
+          }else{
+
+            let function_groups_val =  document.querySelector('#function_groups').value
+            let function_users_val =  document.querySelector('#function_users').value
+
+            valueMetadata.function_groups = (!function_groups_val) ? fn_name : [].concat(function_groups_val.split(','));
+            valueMetadata.function_users = (!function_users_val) ? fn_name : [].concat(function_users_val.split(','));
+
+            let data = {
+                        filenames:['functions.js','metadata.js','context.js'],
+                        content:{'metadata.js':JSON.stringify(valueMetadata)}
+                      }
+            
+              data.content[fn_name +'.js'] = valueFunction
+              data.fn_name = fn_name
+              
+              $.ajax({
+                method: 'PUT',
+                url: '/persist',
+                data: (data)
+              }).done(function (r, success) {
+                if(r.err && r.detail){
+                  document.querySelector('#message').innerHTML = r.detail;
+                } else {
+                  document.querySelector('#message').innerHTML = `saved ${data.fn_name} saved successfully`
+                  console.log(' response ', r)
+                  document.querySelector('#fn_name').value = ''
+                  document.querySelector('#function_groups').value = '';
+                  document.querySelector('#function_users').value = '';
+                }
+              }).error(function (error, r) {
+                 console.error('error ', error)
+                 document.querySelector('#message').innerHTML = error
+                  
+              })
+          }
+      }
+
+    </script>
+    <script>
+            riot.compile(function () {
+                riot.mount('usermanagement', {})
+                riot.mount('coditor', {
+                    lang: 'javascript',
+                    tabs: [
+                      {
+                        title: 'function.js',
+                        checked: 'checked',
+                        editor: {
+                            id: 'function',
+                            code: `// before reaching
+
+module.exports = (ctx, callback) => {
+  const moment = require('moment')
+
+  console.log('**FROM HANDLER**')
+  console.log('**************')
+  console.log('ctx.arguments >> ')
+  console.log(ctx.arguments)
+  
+  console.log('ctx.secrets >> ')
+  console.log(ctx.secrets)
+  
+  console.log('ctx.data >> ')
+  console.log(ctx.data)
+
+
+  console.log(' dynamic code added here >> ',moment(new Date()).format('YYYY-MM-DD > HH:MM:SS'))
+  
+  
+  console.log(' adding '+ ctx.arguments.a +' & '+ ctx.arguments.b +' >> ', (ctx.arguments.a + ctx.arguments.b))
+  // do nothing right now , just echo input back
+  callback(null, (ctx.arguments.a + ctx.arguments.b))
+}`
+                        }
+                      }, 
+                      {
+                        title: 'metadata.js',
+                        editor: {
+                            id: 'metadata',
+                            "filename":"metadata.js",
+                            code: `{
+    "rid": "12345abcde",
+    "arguments": {
+      "a":54,
+      "b":46,
+      "user_id":"< %=secrets.facebook.user_id% >"
+    },
+    "data": {},
+    "secrets":{
+      "facebook":{
+        "user_id":"saurshaz",
+        "group_id":"admin",
+        "redirect_uri":"http://appler.xyz/cb/facebook?param1="
+      }
+    },
+    "modules":{
+      "ejs":"latest",
+      "mongoskin":"latest"
+    },
+    "date_created":"new Date()"
+    
+ }`
+                        }
+                      }, 
+                    ]
+                });
+            });
+
+        </script>
+  </body>
+
+</html>

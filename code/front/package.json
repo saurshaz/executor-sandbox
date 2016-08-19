@@ -1,0 +1,51 @@
+{
+  "name": "executor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "executor.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/saurshaz/executor.git"
+  },
+  "keywords": [
+    "api",
+    "executor",
+    "mongodb",
+    "gridfs",
+    "nodejs"
+  ],
+  "author": "saurshaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saurshaz/executor/issues"
+  },
+  "homepage": "https://github.com/saurshaz/executor#readme",
+  "dependencies": {
+    "async": "^2.0.1",
+    "body-parser": "^1.15.2",
+    "bunyan": "^1.8.1",
+    "bunyan-prettystream": "^0.1.3",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.1",
+    "express": "^4.14.0",
+    "gridfs-stream": "^1.1.1",
+    "habitat": "^3.1.2",
+    "hoek": "^4.0.2",
+    "mocha": "^3.0.1",
+    "mongodb": "^2.2.5",
+    "newrelic": "^1.29.0",
+    "sandbox": "^0.8.6",
+    "serve-favicon": "^2.3.0",
+    "superagent": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.1.1",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0"
+  }
+}

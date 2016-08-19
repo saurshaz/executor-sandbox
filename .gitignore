@@ -1,5 +1,9 @@
 node_modules
-code/web/node_modules
-code/web/config/.env
-code/web/config/.env.stage
-code/web/config/.env.prod
+code/front/node_modules
+code/front/config/.env
+code/front/config/.env.stage
+code/front/config/.env.prod
+code/sandbox/node_modules
+code/sandbox/config/.env
+code/sandbox/config/.env.stage
+code/sandbox/config/.env.prod
