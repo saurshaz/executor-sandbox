@@ -4,7 +4,7 @@ sandbox:
     - "3600:3600"
   volumes:
     - ./code/sandbox:/srv/www/sandbox
-  command: bash -c "[ -d /srv/www/sandbox ] && echo "Directory Exists" || mkdir -p /srv/www/sandbox && cp /srv/www/sandbox/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/sandbox/server.js"
+  command: bash -c "cp /srv/www/sandbox/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/sandbox/server.js"
   links:
     - mongodb
 front:
@@ -13,7 +13,7 @@ front:
     - "3333:3333"
   volumes:
     - ./code/front:/srv/www/front
-  command: bash -c "[ -d /srv/www/front ] && echo "Directory Exists" || mkdir -p /srv/www/front && cp /srv/www/front/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/front/server.js"
+  command: bash -c "cp /srv/www/front/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/front/src/index.js"
   links:
     - mongodb
 mongodb:

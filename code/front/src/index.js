@@ -15,7 +15,6 @@ const app = express()
 const env = require('./lib/environment')
 const log = require('./lib/logger')
 const utils = require('./lib/utils')
-const fetch = require('node-fetch');
 const superagent = require('superagent');
 require('newrelic')
 
