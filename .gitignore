@@ -7,3 +7,5 @@ code/sandbox/node_modules
 code/sandbox/config/.env
 code/sandbox/config/.env.stage
 code/sandbox/config/.env.prod
+
+*.log
