@@ -5,6 +5,8 @@
 ## todo
 - timeouts
 - have a way to start this on demand
+- handle failover inc ase of errors system shall remain stable
+- handle timeouts in `vm`
 
 
 

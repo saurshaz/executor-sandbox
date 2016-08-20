@@ -4,7 +4,7 @@ sandbox:
     - "3600:3600"
   volumes:
     - ./code/sandbox:/srv/www/sandbox
-  command: bash -c "cp /srv/www/sandbox/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/sandbox/server.js"
+  command: bash -c "cd /srv/www/sandbox && npm install && node /srv/www/sandbox/server.js"
   links:
     - mongodb
 front:
@@ -13,12 +13,12 @@ front:
     - "3333:3333"
   volumes:
     - ./code/front:/srv/www/front
-  command: bash -c "cp /srv/www/front/package.json /srv/www/ && cd /srv/www && npm install && node /srv/www/front/src/index.js"
+  command: bash -c "cd /srv/www/front && npm install && node /srv/www/front/src/index.js"
   links:
     - mongodb
 mongodb:
   image: mongo
-  ports: 
+  ports:
    - "27017:27017"
   environment:
     MONGODB_PASS: password

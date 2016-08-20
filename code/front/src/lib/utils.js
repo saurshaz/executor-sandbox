@@ -33,17 +33,22 @@ exports.processMe = (_sandbox_url, _db, ctx, cb) => {
         },
         (file, callback) => {
           // process authentication and authoriation here
-          // log.info(' file metadata >>> ', file.metadata)
+          log.info(' ctx.callee >>> ', ctx.callee)
           let isAllowed = false
           // console.log(file.metadata.function_users)
           isAllowed = (file.metadata && file.metadata.function_users && file.metadata.function_users.indexOf && file.metadata.function_users.indexOf(ctx.callee) !== -1)
           if(!isAllowed){
             // (file.metadata.function_groups, current_user) => {
+            // @todo :: defense here if no user as specified found
             _db.collection('users').findOne({id: ctx.callee}, (err, user) => {
-              if(matching_groups(file.metadata.function_groups, user.groups).length > 0){
-                isAllowed = true
+              if(user && user.groups){
+                if(matching_groups(file.metadata.function_groups, user.groups).length > 0){
+                  isAllowed = true
+                }
+                callback(null, isAllowed, file)
+              } else {
+                callback({err : 'no user found', detail: `No user found for ${ctx.callee}`}, null, file)
               }
-              callback(null, isAllowed, file)
             })
           } else {
             callback(null, isAllowed, file)
