@@ -15,8 +15,10 @@ const app = express()
 const env = require('./lib/environment')
 const log = require('./lib/logger')
 const utils = require('./lib/utils')
-const superagent = require('superagent');
+const superagent = require('superagent')
+let socket_io = require('socket.io')
 require('newrelic')
+
 
 // @todo
 // have default groups setup, ability to add new
@@ -30,6 +32,7 @@ require('newrelic')
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')))
 
+app.io = socket_io()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -118,6 +121,14 @@ app.put('/fly', (req, res) => {
   });
 })
 
-app.listen(process.env.PORT, () => {
+let server = app.listen(process.env.PORT, () => {
   log.info('Executor Server is running at -', process.env.PORT)
 })
+app.io.attach(server)
+app.io.sockets.on('connection', function (socket) {
+  log.info('*** Connection made : >>>> socket query received >>>> ', socket.request._query)
+  socket.emit('it_started', {'it':'started'})
+})
+app.io.emit('xxx', {'xxx':'yyy'})
+// start websocket stuff
+// sockets_stuff(app.io)

@@ -20,18 +20,30 @@
     <button onclick="saveFunction()"> Save </button>
     <br/>
     <script src="/jquery-1.10.2-min.js"></script>
+    <script src="/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/ace/1.2.3/noconflict/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.4.0/riot+compiler.min.js"></script>
       <script>
         var _editors = [];
         const IN_OPTIONS = {AUTH_URL:'<%= AUTH_SERVER_URL %>', apto:'<%= REDIRECT_URI_PATH %>', apid:'appler'}
         console.log(IN_OPTIONS);
+
+
       </script>
     <script src="/js.cookie.js"></script>
     <script src="./coditor.tag" type="riot/tag"></script>
     <script src="./usermanagement.tag" type="riot/tag"></script>
     <script src="<%= AUTH_SERVER_URL %>/assets/widget.js"></script>
     <script>
+    var socket = io();
+    socket.on('connection', (socket) => {
+      socket.on('it_started', (socket) => {
+        console.log(' handler invoked ', socket);
+        // Cookies.remove('auth')
+        // Cookies.remove('loggedinuserid')
+        // Cookies.remove('applerac')
+      })
+    })
       const saveFunction = () => {
           let valueMetadata = JSON.parse(_editors[1].env.editor.getValue())
           let valueFunction = _editors[0].env.editor.getValue()
