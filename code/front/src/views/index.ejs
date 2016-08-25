@@ -7,8 +7,9 @@
   </head>
 
   <body>
+    <section id="auth-embedder-id"></section>
     <div id="message"></div>
-    <usermanagement auth_url="<%= AUTH_SERVER_URL %>" redirect_uri_path="<%= REDIRECT_URI_PATH %>"></usermanagement>
+    <!-- <usermanagement auth_url="<%= AUTH_SERVER_URL %>" redirect_uri_path="<%= REDIRECT_URI_PATH %>"></usermanagement> -->
     <coditor></coditor>
     <label> function Name </label> <input type="text" id="fn_name">
     <br/>
@@ -23,16 +24,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.4.0/riot+compiler.min.js"></script>
       <script>
         var _editors = [];
+        const IN_OPTIONS = {AUTH_URL:'<%= AUTH_SERVER_URL %>', apto:'<%= REDIRECT_URI_PATH %>', apid:'appler'}
+        console.log(IN_OPTIONS);
       </script>
-      <script src="/js.cookie.js"></script>  
+    <script src="/js.cookie.js"></script>
     <script src="./coditor.tag" type="riot/tag"></script>
     <script src="./usermanagement.tag" type="riot/tag"></script>
+    <script src="<%= AUTH_SERVER_URL %>/assets/widget.js"></script>
     <script>
       const saveFunction = () => {
           let valueMetadata = JSON.parse(_editors[1].env.editor.getValue())
           let valueFunction = _editors[0].env.editor.getValue()
           const fn_name = document.querySelector('#fn_name').value;
-          
+
           if(!fn_name) {
             alert(' No function name provided')
           }else{
@@ -47,10 +51,10 @@
                         filenames:['functions.js','metadata.js','context.js'],
                         content:{'metadata.js':JSON.stringify(valueMetadata)}
                       }
-            
+
               data.content[fn_name +'.js'] = valueFunction
               data.fn_name = fn_name
-              
+
               $.ajax({
                 method: 'PUT',
                 url: '/persist',
@@ -68,7 +72,7 @@
               }).error(function (error, r) {
                  console.error('error ', error)
                  document.querySelector('#message').innerHTML = error
-                  
+
               })
           }
       }
@@ -94,23 +98,23 @@ module.exports = (ctx, callback) => {
   console.log('**************')
   console.log('ctx.arguments >> ')
   console.log(ctx.arguments)
-  
+
   console.log('ctx.secrets >> ')
   console.log(ctx.secrets)
-  
+
   console.log('ctx.data >> ')
   console.log(ctx.data)
 
 
   console.log(' dynamic code added here >> ',moment(new Date()).format('YYYY-MM-DD > HH:MM:SS'))
-  
-  
+
+
   console.log(' adding '+ ctx.arguments.a +' & '+ ctx.arguments.b +' >> ', (ctx.arguments.a + ctx.arguments.b))
   // do nothing right now , just echo input back
   callback(null, (ctx.arguments.a + ctx.arguments.b))
 }`
                         }
-                      }, 
+                      },
                       {
                         title: 'metadata.js',
                         editor: {
@@ -136,10 +140,10 @@ module.exports = (ctx, callback) => {
       "mongoskin":"latest"
     },
     "date_created":"new Date()"
-    
+
  }`
                         }
-                      }, 
+                      },
                     ]
                 });
             });

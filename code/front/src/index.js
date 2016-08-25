@@ -18,9 +18,9 @@ const utils = require('./lib/utils')
 const superagent = require('superagent');
 require('newrelic')
 
-// @todo 
+// @todo
 // have default groups setup, ability to add new
-// ability to add users to groups 
+// ability to add users to groups
 // login flow
 // post-login
 // create users collection entry with default groups allocated
@@ -121,5 +121,3 @@ app.put('/fly', (req, res) => {
 app.listen(process.env.PORT, () => {
   log.info('Executor Server is running at -', process.env.PORT)
 })
-
-
