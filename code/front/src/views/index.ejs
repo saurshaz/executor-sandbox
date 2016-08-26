@@ -23,71 +23,81 @@
     <script src="/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/ace/1.2.3/noconflict/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/2.4.0/riot+compiler.min.js"></script>
-      <script>
-        var _editors = [];
-        const IN_OPTIONS = {AUTH_URL:'<%= AUTH_SERVER_URL %>', apto:'<%= REDIRECT_URI_PATH %>', apid:'appler'}
-        console.log(IN_OPTIONS);
-
-
-      </script>
     <script src="/js.cookie.js"></script>
     <script src="./coditor.tag" type="riot/tag"></script>
     <script src="./usermanagement.tag" type="riot/tag"></script>
+    <script>
+    var _editors = [];
+    const IN_OPTIONS = {AUTH_URL:'<%= AUTH_SERVER_URL %>', apto:'<%= REDIRECT_URI_PATH %>', apid:'appler'}
+    console.log(IN_OPTIONS);
+
+
+    </script>
     <script src="<%= AUTH_SERVER_URL %>/assets/widget.js"></script>
     <script>
     var socket = io();
-    socket.on('connection', (socket) => {
-      socket.on('it_started', (socket) => {
-        console.log(' handler invoked ', socket);
+    socket.on('connection', (data) => {
+      console.log(' connection made invoked ', data);
+      // @todo :: fix using websockets in tandem
+      socket.on('it_started', (data) => {
+        // console.log(' server connection made ', data);
         // Cookies.remove('auth')
         // Cookies.remove('loggedinuserid')
         // Cookies.remove('applerac')
       })
     })
-      const saveFunction = () => {
-          let valueMetadata = JSON.parse(_editors[1].env.editor.getValue())
-          let valueFunction = _editors[0].env.editor.getValue()
-          const fn_name = document.querySelector('#fn_name').value;
 
-          if(!fn_name) {
-            alert(' No function name provided')
-          }else{
+    socket.on('xxx', (data) => {
+      console.log(' xxx connection made ', data);
+      // Cookies.remove('auth')
+      // Cookies.remove('loggedinuserid')
+      // Cookies.remove('applerac')
+    })
 
-            let function_groups_val =  document.querySelector('#function_groups').value
-            let function_users_val =  document.querySelector('#function_users').value
+    const saveFunction = () => {
+        let valueMetadata = JSON.parse(_editors[1].env.editor.getValue())
+        let valueFunction = _editors[0].env.editor.getValue()
+        const fn_name = document.querySelector('#fn_name').value;
 
-            valueMetadata.function_groups = (!function_groups_val) ? fn_name : [].concat(function_groups_val.split(','));
-            valueMetadata.function_users = (!function_users_val) ? fn_name : [].concat(function_users_val.split(','));
+        if(!fn_name) {
+          alert(' No function name provided')
+        }else{
 
-            let data = {
-                        filenames:['functions.js','metadata.js','context.js'],
-                        content:{'metadata.js':JSON.stringify(valueMetadata)}
-                      }
+          let function_groups_val =  document.querySelector('#function_groups').value
+          let function_users_val =  document.querySelector('#function_users').value
 
-              data.content[fn_name +'.js'] = valueFunction
-              data.fn_name = fn_name
+          valueMetadata.function_groups = (!function_groups_val) ? fn_name : [].concat(function_groups_val.split(','));
+          valueMetadata.function_users = (!function_users_val) ? fn_name : [].concat(function_users_val.split(','));
 
-              $.ajax({
-                method: 'PUT',
-                url: '/persist',
-                data: (data)
-              }).done(function (r, success) {
-                if(r.err && r.detail){
-                  document.querySelector('#message').innerHTML = r.detail;
-                } else {
-                  document.querySelector('#message').innerHTML = `saved ${data.fn_name} saved successfully`
-                  console.log(' response ', r)
-                  document.querySelector('#fn_name').value = ''
-                  document.querySelector('#function_groups').value = '';
-                  document.querySelector('#function_users').value = '';
-                }
-              }).error(function (error, r) {
-                 console.error('error ', error)
-                 document.querySelector('#message').innerHTML = error
+          let data = {
+                      filenames:['functions.js','metadata.js','context.js'],
+                      content:{'metadata.js':JSON.stringify(valueMetadata)}
+                    }
 
-              })
-          }
-      }
+            data.content[fn_name +'.js'] = valueFunction
+            data.fn_name = fn_name
+
+            $.ajax({
+              method: 'PUT',
+              url: '/persist',
+              data: (data)
+            }).done(function (r, success) {
+              if(r.err && r.detail){
+                document.querySelector('#message').innerHTML = r.detail;
+              } else {
+                document.querySelector('#message').innerHTML = `saved ${data.fn_name} saved successfully`
+                console.log(' response ', r)
+                document.querySelector('#fn_name').value = ''
+                document.querySelector('#function_groups').value = '';
+                document.querySelector('#function_users').value = '';
+              }
+            }).error(function (error, r) {
+               console.error('error ', error)
+               document.querySelector('#message').innerHTML = error
+
+            })
+        }
+    }
 
     </script>
     <script>
